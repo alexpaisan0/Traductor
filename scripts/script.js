@@ -23,23 +23,45 @@ async function translateText() {
     const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${from}&tl=${to}&dt=t&q=${encodeURIComponent(text)}`;
 
     try {
-        const res = await fetch(url);
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), 4000);
+
+        const res = await fetch(url, { signal: controller.signal });
+        clearTimeout(timeout);
+
         const data = await res.json();
 
-        // Texto traducido
-        outputText.value = data[0].map(x => x[0]).join("");
+        if (!Array.isArray(data) || !Array.isArray(data[0])) {
+            throw new Error("Formato inesperado");
+        }
 
-        // ✅ Detectar idioma automáticamente si está en AUTO
+        const translated = data[0]
+            .filter(chunk => chunk && chunk[0])
+            .map(chunk => chunk[0])
+            .join("");
+
+        if (translated.trim() === "") throw new Error("Vacío");
+
+        outputText.value = translated;
+
         if (from === "auto" && data[2]) {
-            const detectedLang = data[2];
-            inputLang.value = detectedLang;
+            inputLang.value = data[2];
         }
 
     } catch (err) {
-        console.error(err);
-        outputText.value = "❌ Error traduciendo";
+        console.warn("Error traduciendo:", err);
+
+        try {
+            const resRetry = await fetch(url);
+            const dataRetry = await resRetry.json();
+            const translatedRetry = dataRetry[0].map(x => x[0]).join("");
+            outputText.value = translatedRetry || "Error al traducir ❌";
+        } catch {
+            outputText.value = "Sin conexión o servicio no disponible ❌";
+        }
     }
 }
+
 
 
 // --- Traducir al presionar Enter ---
@@ -98,15 +120,8 @@ function setupSpeech() {
 
     recognition = new SpeechRecognition();
 
-    // Idiomas candidatos cuando está en AUTO (puedes agregar más)
-    const autoLangs = [
-        "es-ES", "en-US", "fr-FR", "de-DE",
-        "pt-PT", "it-IT", "ru-RU", "ar-SA"
-    ];
-
-    recognition.lang = inputLang.value !== "auto"
-        ? inputLang.value
-        : autoLangs.join(",");
+    // ✅ Usar idioma correcto según LOCALES
+    recognition.lang = getLocale(inputLang.value);
 
     recognition.continuous = false;
     recognition.interimResults = false;
@@ -133,6 +148,7 @@ function setupSpeech() {
 }
 
 setupSpeech();
+
 
 // ✅ Actualizar reconocimiento cuando cambias idioma manualmente
 inputLang.addEventListener("change", () => {
@@ -179,6 +195,7 @@ clearBtn.addEventListener("click", () => {
     if (recognition && listening) recognition.stop();
 });
 
+
 // ✅ Auto-traducir cuando cambias el idioma
 inputLang.addEventListener("change", () => {
     if (inputText.value.trim() !== "") {
@@ -191,3 +208,112 @@ outputLang.addEventListener("change", () => {
         translateText();
     }
 });
+
+
+// ----------- LOCALES PARA MICRÓFONO -----------
+const LOCALES = {
+    auto: "es-ES",
+
+    af: "af-ZA",
+    sq: "sq-AL",
+    am: "am-ET",
+    ar: "ar-SA",
+    hy: "hy-AM",
+    az: "az-AZ",
+    eu: "eu-ES",
+    bn: "bn-IN",
+    bs: "bs-BA",
+    bg: "bg-BG",
+    ca: "ca-ES",
+    ceb: "ceb-PH",
+    "zh-CN": "zh-CN",
+    "zh-TW": "zh-TW",
+    hr: "hr-HR",
+    cs: "cs-CZ",
+    da: "da-DK",
+    nl: "nl-NL",
+    en: "en-US",
+    eo: "eo",
+    et: "et-EE",
+    fi: "fi-FI",
+    fr: "fr-FR",
+    gl: "gl-ES",
+    ka: "ka-GE",
+    de: "de-DE",
+    el: "el-GR",
+    gu: "gu-IN",
+    ht: "ht-HT",
+    ha: "ha-NG",
+    he: "he-IL",
+    hi: "hi-IN",
+    hmn: "hmn",
+    hu: "hu-HU",
+    is: "is-IS",
+    ig: "ig-NG",
+    id: "id-ID",
+    ga: "ga-IE",
+    it: "it-IT",
+    ja: "ja-JP",
+    jw: "jv-ID",
+    kn: "kn-IN",
+    kk: "kk-KZ",
+    km: "km-KH",
+    ko: "ko-KR",
+    lo: "lo-LA",
+    la: "la",
+    lv: "lv-LV",
+    lt: "lt-LT",
+    mk: "mk-MK",
+    mg: "mg-MG",
+    ms: "ms-MY",
+    ml: "ml-IN",
+    mt: "mt-MT",
+    mi: "mi-NZ",
+    mr: "mr-IN",
+    mn: "mn-MN",
+    ne: "ne-NP",
+    no: "no-NO",
+    ny: "ny-MW",
+    or: "or-IN",
+    ps: "ps-AF",
+    fa: "fa-IR",
+    pl: "pl-PL",
+    pt: "pt-PT",
+    pa: "pa-IN",
+    ro: "ro-RO",
+    ru: "ru-RU",
+    sm: "sm-WS",
+    gd: "gd-GB",
+    sr: "sr-RS",
+    st: "st-LS",
+    sn: "sn-ZW",
+    sd: "sd-PK",
+    si: "si-LK",
+    sk: "sk-SK",
+    sl: "sl-SI",
+    so: "so-SO",
+    es: "es-ES",
+    su: "su-ID",
+    sw: "sw-KE",
+    sv: "sv-SE",
+    tl: "fil-PH",
+    tg: "tg-TJ",
+    ta: "ta-IN",
+    tt: "tt-RU",
+    te: "te-IN",
+    th: "th-TH",
+    tr: "tr-TR",
+    uk: "uk-UA",
+    ur: "ur-PK",
+    uz: "uz-UZ",
+    vi: "vi-VN",
+    cy: "cy-GB",
+    xh: "xh-ZA",
+    yi: "yi",
+    yo: "yo-NG",
+    zu: "zu-ZA"
+};
+
+function getLocale(code) {
+    return LOCALES[code] || "es-ES";
+}
