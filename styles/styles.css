@@ -7,8 +7,8 @@
 }
 
 body {
-    background: #121212;
-    color: #fff;
+    background: #f2f2f2; /* estilo Google, claro */
+    color: #000;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -17,230 +17,171 @@ body {
 
 /* ======= CONTENEDOR PRINCIPAL ======= */
 .container {
-    width: 90%;
-    max-width: 900px;
+    width: 95%;
+    max-width: 1000px;
 }
 
 /* ======= TRADUCTOR ======= */
 .translator-box {
+    background: #ffffff;
+    border: 1px solid #d9d9d9;
+    border-radius: 12px;
+    padding: 20px;
     display: flex;
-    background: #1e1e1e;
-    border: 1px solid #2c2c2c;
-    border-radius: 10px;
-    overflow: hidden;
-    position: relative;
+    flex-direction: column;
+    gap: 18px;
+}
+
+/* ======= FILA SUPERIOR (SELECTS + SWAP) ======= */
+.lang-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* selects */
+.lang-row select {
+    background: #ffffff;
+    border: 1px solid #d9d9d9;
+    padding: 8px 10px;
+    border-radius: 6px;
+    font-size: 15px;
+    cursor: pointer;
+    width: 42%;
+}
+
+#swap-btn {
+    background: #ffffff;
+    border: 1px solid #d9d9d9;
+    border-radius: 50%;
+    width: 38px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+#swap-btn:hover {
+    background: #e9e9e9;
 }
 
 /* ======= CAJAS ======= */
+.boxes {
+    display: flex;
+    gap: 20px;
+}
+
 .box {
     flex: 1;
-    display: flex;
-    flex-direction: column;
+    background: #ffffff;
+    border: 1px solid #d9d9d9;
+    border-radius: 10px;
+    position: relative;
 }
 
-.box-header {
-    background: #1e1e1e;
-    border-bottom: 1px solid #2c2c2c;
-    padding: 10px;
-}
-
-/* ======= SELECTS DE IDIOMAS ======= */
-select {
-    width: 100%;
-    background: #1e1e1e;
-    border: none;
-    color: #fff;
-    outline: none;
-    font-size: 15px;
-}
-
-/* ======= TEXTAREAS ======= */
+/* textarea */
 textarea {
-    flex: 1;
-    background: #1e1e1e;
+    width: 100%;
+    height: 240px;
     border: none;
     outline: none;
-    padding: 15px;
-    color: #fff;
-    font-size: 18px;
     resize: none;
+    padding: 15px;
+    font-size: 18px;
+    color: #111;
+    background: transparent;
 }
 
+/* placeholder */
 textarea::placeholder {
-    color: #7c7c7c;
+    color: #999;
 }
 
-/* ======= BOTÓN DE INTERCAMBIO ======= */
-#swap-btn {
-    background: #2b2b2b;
-    border: none;
-    color: #fff;
-    padding: 0 12px;
-    font-size: 20px;
-    cursor: pointer;
-    transition: 0.2s;
-}
-
-#swap-btn:hover {
-    background: #383838;
-}
-
-/* ======= BOTÓN TRADUCIR ======= */
-#translate-btn {
-    margin-top: 10px;
-    width: 100%;
-    padding: 12px;
-    font-size: 18px;
-    border: none;
-    background: #1a73e8;
-    color: white;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: 0.2s;
-}
-
-#translate-btn:hover {
-    background: #1663c4;
-}
-
-/* ======= RESPONSIVE ======= */
-@media (max-width: 768px) {
-    .translator-box {
-        flex-direction: column;
-    }
-    
-    #swap-btn {
-        width: 100%;
-        padding: 8px;
-    }
-}
-
+/* ======= X CLEAR (IZQUIERDA) ======= */
 #clear-btn {
-    background: #444;
-    color: white;
-    border: none;
-    padding: 8px 12px;
-    font-size: 18px;
-    cursor: pointer;
-    border-radius: 8px;
-    margin-left: 6px;
-    transition: 0.2s;
-}
-
-#clear-btn:hover {
-    background: #ff4444;
-}
-
-/* --- BOTÓN SWAP AL ESTILO GOOGLE --- */
-
-.swap-container {
     position: absolute;
-    top: 65px; /* ajusta si quieres más arriba/abajo */
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 10;
-}
-
-#swap-btn {
-    background: #2b2b2b;
-    border: none;
-    color: #fff;
-    padding: 6px 10px;
-    font-size: 18px;
-    border-radius: 50%;
-    cursor: pointer;
-    box-shadow: 0 0 4px rgba(0,0,0,0.6);
-    transition: 0.2s;
-}
-
-#swap-btn:hover {
-    background: #3a3a3a;
-    transform: scale(1.1);
-}
-
-/* --- BOTONES PEQUEÑOS DE ACCIÓN (estilo Google) --- */
-
-.box-actions {
-    display: flex;
-    gap: 6px;
-    padding: 8px;
-}
-
-.box-actions button {
-    background: #2b2b2b;
-    border: none;
-    color: white;
-    font-size: 16px;
-    padding: 8px;
-    width: 36px;
-    height: 36px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: 0.2s;
-}
-
-.box-actions button:hover {
-    background: #3c3c3c;
-}
-
-/* Botón borrar rojo hover */
-#clear-btn:hover {
-    background: #b30000;
-}
-
-/* 🔊 y 📋 botones lado derecho con separación superior */
-.box-actions.right {
-    justify-content: flex-end;
-}
-
-/* Botón limpiar arriba a la derecha como Google */
-.top-clear-btn {
-    position: absolute;
-    right: 15px;
-    top: 55px; /* ajusta si quieres */
+    top: 10px;
+    left: 10px; /* ✅ lado izquierdo */
     background: transparent;
     border: none;
     font-size: 20px;
-    color: #bbb;
     cursor: pointer;
-    padding: 5px;
-    z-index: 10;
-    transition: 0.2s;
+    color: #666;
+    transition: 0.2s ease;
 }
 
-.top-clear-btn:hover {
-    color: #ff4444;
-    transform: scale(1.15);
+#clear-btn:hover {
+    color: #f44336;
+    transform: scale(1.1);
 }
 
-/* Misma estructura que los botones de la derecha */
-.box-actions.left {
+/* ======= BOTONES DE LA DERECHA ======= */
+.box-actions {
     display: flex;
-    gap: 6px;
-    padding: 8px;
-    justify-content: flex-start;
+    gap: 8px;
+    padding: 10px;
+    justify-content: flex-end;
 }
 
-/* Botones de acción: mismo estilo que los de la derecha */
-.action-btn {
-    background: #2b2b2b;
-    border: none;
-    color: white;
-    font-size: 16px;
-    padding: 8px;
-    width: 36px;
-    height: 36px;
+.box-actions button {
+    background: #ffffff;
+    border: 1px solid #d9d9d9;
+    padding: 7px;
+    width: 34px;
+    height: 34px;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 8px;
+    border-radius: 6px;
     cursor: pointer;
-    transition: 0.2s;
+    transition: 0.2s ease;
+    font-size: 16px;
+    color: #333;
 }
 
-.action-btn:hover {
-    background: #3c3c3c;
+.box-actions button:hover {
+    background: #efefef;
+}
+
+/* ======= MIC BUTTON (IZQUIERDA) ======= */
+#mic-btn {
+    position: absolute;
+    bottom: 12px;
+    left: 12px;
+    background: #ffffff;
+    border: 1px solid #d9d9d9;
+    width: 36px;
+    height: 36px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    cursor: pointer;
+    transition: 0.2s;
+    color: #333;
+}
+
+#mic-btn:hover {
+    background: #efefef;
+}
+
+/* ======= RESPONSIVE ======= */
+@media (max-width: 700px) {
+
+    .boxes {
+        flex-direction: column;
+    }
+
+    .lang-row select {
+        width: 40%;
+    }
+
+    #swap-btn {
+        width: 36px;
+        height: 36px;
+    }
 }
