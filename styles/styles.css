@@ -215,3 +215,32 @@ textarea::placeholder {
     color: #ff4444;
     transform: scale(1.15);
 }
+
+/* Misma estructura que los botones de la derecha */
+.box-actions.left {
+    display: flex;
+    gap: 6px;
+    padding: 8px;
+    justify-content: flex-start;
+}
+
+/* Botones de acción: mismo estilo que los de la derecha */
+.action-btn {
+    background: #2b2b2b;
+    border: none;
+    color: white;
+    font-size: 16px;
+    padding: 8px;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.action-btn:hover {
+    background: #3c3c3c;
+}
