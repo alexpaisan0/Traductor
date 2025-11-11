@@ -248,3 +248,41 @@ clearBtn.addEventListener("click", () => {
 window.addEventListener("load", () => {
   if (inputText.value.trim()) translateText();
 });
+
+// SHORTCUT TABS (es, fr, ja)
+function activateTab(btn, group){
+  group.querySelectorAll('.qt').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+document.querySelectorAll('.quick-tabs').forEach(group=>{
+  const side = group.getAttribute('data-side'); // "source" o "target"
+  group.addEventListener('click', e=>{
+    const btn = e.target.closest('.qt');
+    if(!btn) return;
+    const lang = btn.dataset.lang; // es | fr | ja
+
+    if(side === 'source'){
+      document.getElementById('input-language').value = lang;
+    }else{
+      document.getElementById('output-language').value = lang;
+    }
+    activateTab(btn, group);
+    // dispara traducción si hay texto
+    if (inputText.value.trim() !== '') translateText();
+  });
+});
+
+// Mantener tabs sincronizados si cambias manualmente el <select>
+inputLang.addEventListener('change', ()=>{
+  const group = document.querySelector('.quick-tabs[data-side="source"]');
+  group.querySelectorAll('.qt').forEach(b=>{
+    b.classList.toggle('active', b.dataset.lang === inputLang.value);
+  });
+});
+outputLang.addEventListener('change', ()=>{
+  const group = document.querySelector('.quick-tabs[data-side="target"]');
+  group.querySelectorAll('.qt').forEach(b=>{
+    b.classList.toggle('active', b.dataset.lang === outputLang.value);
+  });
+});
